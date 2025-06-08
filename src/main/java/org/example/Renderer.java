@@ -12,12 +12,12 @@ public class Renderer {
 
     private final Window window;
     private final Camera camera;
-    private Cube cube = new Cube(new Vector3f(0, 0, -50), 10);
+    private Cube cube = new Cube(new Vector3f(-10, -10, -10), 10);
 
     public Renderer(Window window, EventsHandler eventsHandler){
 
         this.window = window;
-        this.camera = new Camera(new Vector3f(0, 0, 0), eventsHandler);
+        this.camera = new Camera(new Vector3f(0, 10, -50), eventsHandler);
     }
 
     public void render(){

@@ -115,15 +115,9 @@ public class Window {
         this.width = newWidth;
         this.height = newHeight;
 
-        Perspective.init();
+        Perspective.init(width, height);
 
-        if(width <= height){
-
-            glViewport(0, (height - width) / 2, width, width);
-        }
-        else{
-            glViewport((width - height) / 2, 0, height, height);
-        }
+        glViewport(0, 0, width, height);
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

@@ -10,17 +10,14 @@ import static org.lwjgl.opengl.GL11.glLoadMatrixf;
 
 public class Perspective {
 
-    private static final FloatBuffer floatBuffer;
+    public static void init(int width, int height){
 
-    static {
+        float aspectRatio = (float) width / (float) height;
 
-        Matrix4f perspectiveMatrix = new Matrix4f().setPerspective(120, 1.0f, 0.1f, 1000);
+        Matrix4f perspectiveMatrix = new Matrix4f().setPerspective(90, aspectRatio, 0.1f, 1000);
 
-        floatBuffer = BufferUtils.createFloatBuffer(16);
+        FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(16);
         perspectiveMatrix.get(floatBuffer);
-    }
-
-    public static void init(){
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();

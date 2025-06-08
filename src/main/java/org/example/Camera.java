@@ -21,11 +21,13 @@ public class Camera {
     public Camera(Vector3f position, EventsHandler eventsHandler){
 
         this.eye = new Vector3f(position);
-        this.angle = new Vector3f(0, 0, 0);
+        this.angle = new Vector3f(0, 90, 0);
         this.top = new Vector3f(0, 1, 0);
-        this.destination = new Vector3f(0, 0, -10);
+        this.destination = new Vector3f(0, 0, 0);
 
         eventsHandler.addKeyboardCallback(this::moveCallback);
+
+        updateDestination();
     }
 
     public void moveCallback(int key, int action){
@@ -63,7 +65,14 @@ public class Camera {
 
     private void moveInForward(int scale){
 
-        Vector3f forward = new Vector3f(destination).sub(eye).normalize();
+        Vector3f forward = new Vector3f(destination).sub(eye);
+
+        if(forward.lengthSquared() == 0){
+
+            System.out.println("Vector " + forward + " have length 0");
+        }
+
+        forward.normalize();
 
         eye.x += scale * forward.x;
         eye.y += scale * forward.y;
@@ -77,9 +86,16 @@ public class Camera {
         direction.x = (float) (Math.cos(Math.toRadians(angle.x)) * Math.cos(Math.toRadians(angle.y)));
         direction.y = (float) (Math.sin(Math.toRadians(angle.x)));
         direction.z = (float) (Math.cos(Math.toRadians(angle.x)) * Math.sin(Math.toRadians(angle.y)));
-        direction.normalize();
 
-        destination.set(eye).add(new Vector3f(direction).mul(10));
+        if(direction.lengthSquared() == 0){
+
+            direction.set(0, 0, -1);
+        }
+        else{
+            direction.normalize();
+        }
+
+        destination.set(eye).add(new Vector3f(direction).mul(50));
     }
 
     public void update(){
