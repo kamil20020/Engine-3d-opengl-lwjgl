@@ -1,35 +1,43 @@
 package org.example;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class Mesh {
 
-    private Vector3f[] vertices;
-    private Integer[] triangles;
+    private final Vector3f[] vertices;
+    private final Integer[] triangles;
+    private final Vector2f[] textureCords;
+    private final Texture texture;
 
-    public Mesh(Vector3f[] vertices, Integer[] triangles){
+    public Mesh(Vector3f[] vertices, Integer[] triangles, Vector2f[] textureCords, Texture texture){
 
         this.vertices = vertices;
         this.triangles = triangles;
+        this.textureCords = textureCords;
+        this.texture = texture;
     }
 
     public void draw(){
 
-        glBegin(GL_TRIANGLES);
+        texture.useTexture();
 
-        glColor3f(0, 1, 0);
+        glBegin(GL_QUADS);
 
-        for(int i = 0; i < triangles.length - 3; i += 3){
+        for(int i = 0; i < triangles.length; i += 4){
 
-            Vector3f v1 = vertices[triangles[i]];
-            Vector3f v2 = vertices[triangles[i + 1]];
-            Vector3f v3 = vertices[triangles[i + 2]];
+            for(int j = 0; j < 4; j++){
 
-            glVertex3f(v1.x, v1.y, v1.z);
-            glVertex3f(v2.x, v2.y, v2.z);
-            glVertex3f(v3.x, v3.y, v3.z);
+                int vIndex = triangles[i + j];
+
+                Vector3f v = vertices[vIndex];
+                Vector2f textureCordsV = textureCords[vIndex];
+
+                glTexCoord2f(textureCordsV.x, textureCordsV.y);
+                glVertex3f(v.x, v.y, v.z);
+            }
         }
 
         glEnd();

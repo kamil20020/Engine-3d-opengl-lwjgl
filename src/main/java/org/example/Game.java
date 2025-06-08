@@ -17,6 +17,8 @@ public class Game {
 
         window.start();
 
+        renderer.init();
+
         while(!window.isWindowClosed()){
 
             window.clearScreen();

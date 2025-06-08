@@ -52,7 +52,7 @@ public class Window {
 
         GL.createCapabilities(); // collaboration between lwjgl, opengl and glfw
 
-        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST); //GL_CULL_FACE
         glClearColor(0f, 0f, 0f, 1.0f);
 
         updateViewPort(width, height);

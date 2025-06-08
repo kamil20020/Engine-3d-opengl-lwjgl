@@ -3,10 +3,9 @@ package org.example;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
+import java.util.Set;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -23,60 +22,127 @@ public class Camera {
         this.eye = new Vector3f(position);
         this.angle = new Vector3f(0, 90, 0);
         this.top = new Vector3f(0, 1, 0);
-        this.destination = new Vector3f(0, 0, 0);
+        this.destination = new Vector3f(0, 0, 50);
 
         eventsHandler.addKeyboardCallback(this::moveCallback);
 
         updateDestination();
     }
 
-    public void moveCallback(int key, int action){
+    public void moveCallback(Set<Integer> pressedKeyboardKeys){
 
-        if(key == GLFW_KEY_W && action == GLFW_PRESS){
+        handleWasd(pressedKeyboardKeys);
 
-            moveInForward(10);
+        if(pressedKeyboardKeys.contains(GLFW_KEY_Q)){
+
+            Vector3f forward = getForward();
+
+            forward.rotateY((float) Math.toRadians(90));
+
+            moveInDirection(10, forward);
         }
-        else if(key == GLFW_KEY_S && action == GLFW.GLFW_PRESS){
 
-            moveInForward(-10);
+        if(pressedKeyboardKeys.contains(GLFW_KEY_E)){
+
+            Vector3f forward = getForward();
+
+            forward.rotateY((float) Math.toRadians(90));
+
+            moveInDirection(-10, forward);
         }
-        else if(key == GLFW_KEY_A && action == GLFW.GLFW_PRESS){
 
-            angle.y -= 1;
+        if(pressedKeyboardKeys.contains(GLFW_KEY_UP)){
+
+            angle.x += 1;
+            angle.x = Math.max(-89, Math.min(89, angle.x));
+
             updateDestination();
         }
-        else if(key == GLFW_KEY_D && action == GLFW.GLFW_PRESS){
 
-            angle.y += 1;
+        if(pressedKeyboardKeys.contains(GLFW_KEY_DOWN)){
+
+            angle.x -= 1;
+            angle.x = Math.max(-89, Math.min(89, angle.x));
+
             updateDestination();
         }
-        else if(key == GLFW_KEY_SPACE && action == GLFW.GLFW_PRESS){
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_SPACE)){
 
             eye.y += 10;
+            destination.y += 10;
         }
-        else if(key == GLFW_KEY_Z && action == GLFW.GLFW_PRESS){
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_Z)){
 
             eye.y -= 10;
+            destination.y -= 10;
         }
 
         System.out.println("eye: " + eye);
+        System.out.println("forward: " + getForward());
         System.out.println("dest: " + destination);
+        System.out.println("angle: " + angle);
+    }
+
+    private void handleWasd(Set<Integer> pressedKeyboardKeys){
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_W)){
+
+            moveInForward(10);
+        }
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_S)){
+
+            moveInForward(-10);
+        }
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_A)){
+
+            angle.y -= 1;
+            angle.y%= 360;
+
+            updateDestination();
+        }
+
+        if(pressedKeyboardKeys.contains(GLFW_KEY_D)){
+
+            angle.y += 1;
+            angle.y %= 360;
+
+            updateDestination();
+        }
     }
 
     private void moveInForward(int scale){
 
+        Vector3f forward = getForward();
+
+        moveInDirection(scale, forward);
+    }
+
+    private void moveInDirection(int scale, Vector3f dir){
+
+        eye.x += scale * dir.x;
+        eye.y += scale * dir.y;
+        eye.z += scale * dir.z;
+
+        updateDestination();
+    }
+
+    private Vector3f getForward(){
+
         Vector3f forward = new Vector3f(destination).sub(eye);
 
-        if(forward.lengthSquared() == 0){
+        if (forward.lengthSquared() < 1e-6f) {
 
-            System.out.println("Vector " + forward + " have length 0");
+            forward.set(0, 0, -1);
+        }
+        else {
+            forward.normalize();
         }
 
-        forward.normalize();
-
-        eye.x += scale * forward.x;
-        eye.y += scale * forward.y;
-        eye.z += scale * forward.z;
+        return forward;
     }
 
     private void updateDestination(){
@@ -87,13 +153,12 @@ public class Camera {
         direction.y = (float) (Math.sin(Math.toRadians(angle.x)));
         direction.z = (float) (Math.cos(Math.toRadians(angle.x)) * Math.sin(Math.toRadians(angle.y)));
 
-        if(direction.lengthSquared() == 0){
+        if (direction.lengthSquared() < 1e-6f) {
 
             direction.set(0, 0, -1);
         }
-        else{
-            direction.normalize();
-        }
+
+        direction.normalize();
 
         destination.set(eye).add(new Vector3f(direction).mul(50));
     }
