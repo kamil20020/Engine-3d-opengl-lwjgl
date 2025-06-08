@@ -1,30 +1,32 @@
 package org.example;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
+
+import java.nio.FloatBuffer;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
 
     private final Window window;
+    private final Camera camera;
+    private Cube cube = new Cube(new Vector3f(0, 0, -50), 10);
 
-    public Renderer(Window window){
+    public Renderer(Window window, EventsHandler eventsHandler){
 
         this.window = window;
+        this.camera = new Camera(new Vector3f(0, 0, 0), eventsHandler);
     }
 
     public void render(){
 
-        glColor3f(0, 1, 0);
-        glBegin(GL_TRIANGLES);
-        glVertex2f(0, 0);
-        glVertex2f(0, 50);
-        glVertex2f(50, 0);
-        glEnd();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-        glColor3f(1, 0, 0);
-        glBegin(GL_TRIANGLES);
-        glVertex2f(0, 0);
-        glVertex2f(0, 50);
-        glVertex2f(-50, 0);
-        glEnd();
+        camera.update();
+
+        cube.draw();
     }
 }
