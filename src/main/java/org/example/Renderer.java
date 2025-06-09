@@ -24,7 +24,18 @@ public class Renderer {
 
         glEnable(GL_TEXTURE_2D);
 
-        Texture texture = new Texture("textures/grass_block_side.png");
+        Texture grassSideTexture = new Texture("textures/grass_block_side.png");
+        Texture grassTopTexture = new Texture("textures/grass_block_top.jpg");
+        Texture dirtTexture = new Texture("textures/dirt.png");
+
+        List<Texture> grassTextures = new ArrayList<>();
+
+        grassTextures.add(dirtTexture);
+        grassTextures.add(grassTopTexture);
+        grassTextures.add(grassSideTexture);
+        grassTextures.add(grassSideTexture);
+        grassTextures.add(grassSideTexture);
+        grassTextures.add(grassSideTexture);
 
         float x = -10;
 
@@ -38,7 +49,7 @@ public class Renderer {
 
                 for(int k=0; k < 16; k++){
 
-                    cubes.add(new Cube(new Vector3f(x, y, z), 16, texture));
+                    cubes.add(new Cube(new Vector3f(x, y, z), 16, grassTextures));
 
                     z += 16;
                 }

@@ -26,7 +26,7 @@ public class Texture {
 
         for (int y = height - 1; y >= 0; y--) {
 
-            for (int x = 0; x < width; x++) {
+            for (int x = width - 1; x >= 0; x--) {
 
                 int pixel = bufferedImage.getRGB(x, y); // ARGB
 
@@ -72,22 +72,14 @@ public class Texture {
 
         URL gotResourceUrl = Texture.class.getClassLoader().getResource(filePath);
 
-        File file = null;
-
-        try {
-           file = new File(gotResourceUrl.toURI());
-        }
-        catch (URISyntaxException e) {
-
-            e.printStackTrace();
-        }
-
         BufferedImage bufferedImage = null;
 
-        try{
+        try {
+            File file = new File(gotResourceUrl.toURI());
+
             bufferedImage = ImageIO.read(file);
         }
-        catch(IOException e){
+        catch (URISyntaxException | IOException e) {
 
             e.printStackTrace();
         }
