@@ -1,0 +1,30 @@
+[
+  {
+    "id": "grass",
+    "texturesNames": [
+      "textures/dirt.png",
+      "textures/grass_block_top.jpg",
+      null,
+      null,
+      null,
+      null
+    ],
+    "defaultTextureName": "textures/grass_block_side.png"
+  },
+  {
+    "id": "dirt",
+    "defaultTextureName": "textures/dirt.png"
+  },
+  {
+    "id": "sand",
+    "defaultTextureName": "textures/sand.png"
+  },
+  {
+    "id": "gravel",
+    "defaultTextureName": "textures/gravel.png"
+  },
+  {
+    "id": "granite",
+    "defaultTextureName": "textures/granite.png"
+  }
+]

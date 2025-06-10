@@ -3,9 +3,6 @@ package org.example;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public class Mesh {
@@ -14,34 +11,22 @@ public class Mesh {
     private final Integer[] triangles;
     private final Vector2f[] textureCords;
     private final Integer[] textureCordsForVertices;
-    private final List<Texture> textures;
 
-    public Mesh(Vector3f[] vertices, Integer[] triangles, Vector2f[] textureCords,  Integer[] textureCordsForVertices, List<Texture> textures){
+    public Mesh(Vector3f[] vertices, Integer[] triangles, Vector2f[] textureCords,  Integer[] textureCordsForVertices){
 
         this.vertices = vertices;
         this.triangles = triangles;
         this.textureCords = textureCords;
         this.textureCordsForVertices = textureCordsForVertices;
-        this.textures = textures;
     }
 
-    public Mesh(Vector3f[] vertices, Integer[] triangles, Vector2f[] textureCords,  Integer[] textureCordsForVertices, Texture texture){
-
-        this(vertices, triangles, textureCords, textureCordsForVertices, new ArrayList<>());
-
-        for(int i = 0; i < triangles.length / 4; i++){
-
-            textures.add(texture);
-        }
-    }
-
-    public void draw(){
+    public void draw(int[] textures, float xMin, float yMin, float zMin){
 
         for(int i = 0, textureIndex = 0; i < triangles.length; i += 4, textureIndex++){
 
-            Texture texture = textures.get(textureIndex);
+            int texture = textures[textureIndex];
 
-            texture.useTexture();
+            Texture.useTexture(texture);
 
             glBegin(GL_QUADS);
 
@@ -55,7 +40,7 @@ public class Mesh {
                 Vector2f textureCordsV = textureCords[vTextureCordsForVertexIndex];
 
                 glTexCoord2f(textureCordsV.x, textureCordsV.y);
-                glVertex3f(v.x, v.y, v.z);
+                glVertex3f(xMin + v.x, yMin + v.y, zMin + v.z);
             }
 
             glEnd();

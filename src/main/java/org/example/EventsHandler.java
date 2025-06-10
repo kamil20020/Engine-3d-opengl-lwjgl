@@ -58,4 +58,9 @@ public class EventsHandler {
 
     }
 
+    public double getTime(){
+
+        return window.getTime();
+    }
+
 }

@@ -11,13 +11,11 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 
-public class Texture {
+public interface Texture {
 
-    private final int textureId;
+    public static int createTexture(String textureFileUrl){
 
-    public Texture(String textureFileUrl){
-
-        BufferedImage bufferedImage = load(textureFileUrl);
+        BufferedImage bufferedImage = loadImage(textureFileUrl);
 
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -45,7 +43,7 @@ public class Texture {
         buffer.flip();
 
         //generate a texture handle or unique ID for this texture
-        textureId = glGenTextures();
+        int textureId = glGenTextures();
 
         //bind the texture
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -66,9 +64,11 @@ public class Texture {
 
         //upload our ByteBuffer to GL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+        return textureId;
     }
 
-    private BufferedImage load(String filePath){
+    private static BufferedImage loadImage(String filePath){
 
         URL gotResourceUrl = Texture.class.getClassLoader().getResource(filePath);
 
@@ -87,7 +87,7 @@ public class Texture {
         return bufferedImage;
     }
 
-    public void useTexture(){
+    public static void useTexture(int textureId){
 
         //bind the texture
         glBindTexture(GL_TEXTURE_2D, textureId);

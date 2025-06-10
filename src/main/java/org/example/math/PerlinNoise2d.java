@@ -1,23 +1,17 @@
 package org.example.math;
 
-import org.joml.Vector3f;
-import org.joml.Vector3i;
-
-import java.util.Arrays;
 import java.util.Random;
 
-public class PerlinNoise {
-
-    private static final double I_X_MAX = 100;
-    private static final double I_Y_MAX = 100;
-
-    private int permutation[] = new int[512];
+public class PerlinNoise2d {
 
     private final Random random;
+
+    private final int[] permutation = new int[512];
 
     private static final int[][] gradients;
 
     private static final float SCALE = 0.05f;
+    private static final long DEFAULT_SEED = 123;
 
     static {
 
@@ -27,16 +21,23 @@ public class PerlinNoise {
         };
     }
 
-    public PerlinNoise(long seed){
+    public PerlinNoise2d(long seed){
 
         this.random = new Random(seed);
 
         initPermutation();
     }
 
-    public PerlinNoise(){
+    public PerlinNoise2d(boolean shouldGetDefaultSeed){
 
-        this.random = new Random();
+        if(shouldGetDefaultSeed){
+
+            this.random = new Random(DEFAULT_SEED);
+        }
+        else{
+
+            this.random = new Random();
+        }
 
         initPermutation();
     }
@@ -110,14 +111,14 @@ public class PerlinNoise {
 
         int[] gradientOnPosition = getGradientOnPosition(ix, iy);
 
-        return dx * gradientOnPosition[0] + dy * gradientOnPosition[1];
+        return dotProduct(dx, gradientOnPosition[0], dy, gradientOnPosition[1]);
     }
 
     private int[] getGradientOnPosition(int x, int y){
 
         int hash = permutation[x + permutation[y]];
 
-        int index = hash % 8;
+        int index = hash % gradients.length;
 
         return gradients[index];
     }
@@ -142,7 +143,7 @@ public class PerlinNoise {
 
     public static void main(String[] args){
 
-        PerlinNoise perlinNoise = new PerlinNoise();
+        PerlinNoise2d perlinNoise = new PerlinNoise2d(true);
 
         double[][] perlinValues = perlinNoise.perlin(800, 800);
 

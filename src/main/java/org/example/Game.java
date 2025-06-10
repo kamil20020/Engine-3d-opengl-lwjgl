@@ -23,8 +23,6 @@ public class Game {
 
             window.clearScreen();
 
-            double time = window.getTime();
-
             renderer.render();
 
             window.refreshScreen();

@@ -3,25 +3,18 @@ package org.example;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.List;
-
 public class Cube extends Mesh{
 
-    public Cube(Vector3f pos, int a, List<Texture> textures){
+    public Cube(int a){
 
-        super(getVertices(pos, a), getQuads(), getTextureCords(), getTextureCordsForVertices(), textures);
+        super(getVertices(a), getQuads(), getTextureCords(), getTextureCordsForVertices());
     }
 
-    public Cube(Vector3f pos, int a, Texture texture){
+    private static Vector3f[] getVertices(int a){
 
-        super(getVertices(pos, a), getQuads(), getTextureCords(), getTextureCordsForVertices(), texture);
-    }
-
-    private static Vector3f[] getVertices(Vector3f pos, int a){
-
-        int x = (int) pos.x;
-        int y = (int) pos.y;
-        int z = (int) pos.z;
+        int x = 0;
+        int y = 0;
+        int z = 0;
 
         int xFar = x + a;
         int yFar = y + a;
@@ -81,4 +74,5 @@ public class Cube extends Mesh{
 
         return textureCordsForVertices;
     }
+
 }

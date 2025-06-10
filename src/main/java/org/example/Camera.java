@@ -16,9 +16,13 @@ public class Camera {
     private final Vector3f eye;
     private final Vector3f destination;
     private final Vector3f top;
+    private final EventsHandler eventsHandler;
+
+    private static final double SENS = 0.2;
 
     public Camera(Vector3f position, EventsHandler eventsHandler){
 
+        this.eventsHandler = eventsHandler;
         this.eye = new Vector3f(position);
         this.angle = new Vector3f(0, 90, 0);
         this.top = new Vector3f(0, 1, 0);
@@ -33,13 +37,15 @@ public class Camera {
 
         handleWasd(pressedKeyboardKeys);
 
+        double time = eventsHandler.getTime();
+
         if(pressedKeyboardKeys.contains(GLFW_KEY_Q)){
 
             Vector3f forward = getForward();
 
             forward.rotateY((float) Math.toRadians(90));
 
-            moveInDirection(10, forward);
+            moveInDirection(time, forward);
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_E)){
@@ -48,12 +54,12 @@ public class Camera {
 
             forward.rotateY((float) Math.toRadians(90));
 
-            moveInDirection(-10, forward);
+            moveInDirection(-time, forward);
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_UP)){
 
-            angle.x += 1;
+            angle.x += time * SENS;
             angle.x = Math.max(-89, Math.min(89, angle.x));
 
             updateDestination();
@@ -61,7 +67,7 @@ public class Camera {
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_DOWN)){
 
-            angle.x -= 1;
+            angle.x -= time * SENS;
             angle.x = Math.max(-89, Math.min(89, angle.x));
 
             updateDestination();
@@ -69,14 +75,14 @@ public class Camera {
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_SPACE)){
 
-            eye.y += 10;
-            destination.y += 10;
+            eye.y += time;
+            destination.y += time;
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_Z)){
 
-            eye.y -= 10;
-            destination.y -= 10;
+            eye.y -= time;
+            destination.y -= time;
         }
 
         System.out.println("eye: " + eye);
@@ -87,41 +93,43 @@ public class Camera {
 
     private void handleWasd(Set<Integer> pressedKeyboardKeys){
 
+        double time = eventsHandler.getTime();
+
         if(pressedKeyboardKeys.contains(GLFW_KEY_W)){
 
-            moveInForward(10);
+            moveInForward(time);
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_S)){
 
-            moveInForward(-10);
+            moveInForward(-time);
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_A)){
 
-            angle.y -= 1;
-            angle.y%= 360;
+            angle.y -= time * SENS;
+            angle.y %= 360;
 
             updateDestination();
         }
 
         if(pressedKeyboardKeys.contains(GLFW_KEY_D)){
 
-            angle.y += 1;
+            angle.y += time * SENS;
             angle.y %= 360;
 
             updateDestination();
         }
     }
 
-    private void moveInForward(int scale){
+    private void moveInForward(double scale){
 
         Vector3f forward = getForward();
 
         moveInDirection(scale, forward);
     }
 
-    private void moveInDirection(int scale, Vector3f dir){
+    private void moveInDirection(double scale, Vector3f dir){
 
         eye.x += scale * dir.x;
         eye.y += scale * dir.y;
