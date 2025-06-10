@@ -1,4 +1,4 @@
-package org.example;
+package texture;
 
 import java.util.List;
 

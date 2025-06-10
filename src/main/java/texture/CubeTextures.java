@@ -1,16 +1,16 @@
-package org.example;
+package texture;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.example.JsonFileLoader;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 
 public class CubeTextures{
 
     private static final Map<String, int[]> cubeTexturesMappings = new HashMap<>();
+    private static final List<String> cubeTexturesOrdered = new LinkedList<>();
     private static final Map<String, Integer> loadedTextures = new HashMap<>();
 
     private static final String TEXTURES_MAPPINGS_FILE_PATH = "textures/textures-mappings.json";
@@ -33,6 +33,8 @@ public class CubeTextures{
             int[] cubeTextures = loadTextures(texturesNames, defaultTexture);
 
             cubeTexturesMappings.put(id, cubeTextures);
+
+            cubeTexturesOrdered.add(id);
         }
     }
 
@@ -110,6 +112,11 @@ public class CubeTextures{
     public static int[] getCubeTextures(String id){
 
         return cubeTexturesMappings.get(id);
+    }
+
+    public static String getTextureName(byte textureOrder){
+
+        return cubeTexturesOrdered.get(textureOrder);
     }
 
 }

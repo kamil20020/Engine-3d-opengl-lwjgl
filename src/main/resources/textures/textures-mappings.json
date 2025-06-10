@@ -1,5 +1,8 @@
 [
   {
+    "id": "air"
+  },
+  {
     "id": "grass",
     "texturesNames": [
       "textures/dirt.png",

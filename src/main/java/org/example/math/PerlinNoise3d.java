@@ -10,7 +10,7 @@ public class PerlinNoise3d {
 
     private static final int[][] gradients;
 
-    private static final float SCALE = 0.05f;
+    private final float scale;
     private static final long DEFAULT_SEED = 123;
 
     static {
@@ -22,14 +22,17 @@ public class PerlinNoise3d {
         };
     }
 
-    public PerlinNoise3d(long seed){
+    public PerlinNoise3d(long seed, float scale){
 
+        this.scale = scale;
         this.random = new Random(seed);
 
         initPermutation();
     }
 
-    public PerlinNoise3d(boolean shouldGetDefaultSeed){
+    public PerlinNoise3d(boolean shouldGetDefaultSeed, float scale){
+
+        this.scale = scale;
 
         if(shouldGetDefaultSeed){
 
@@ -73,9 +76,9 @@ public class PerlinNoise3d {
 
                 for (int k = 0; k < depth; k++) {
 
-                    double x = (double) j * SCALE;
-                    double y = (double) i * SCALE;
-                    double z = (double) k * SCALE;
+                    double x = (double) j * scale;
+                    double y = (double) i * scale;
+                    double z = (double) k * scale;
 
                     double perlinValue = perlin(x, y, z);
                     double normalizedValue = (perlinValue + 1d) / 2d;
@@ -163,7 +166,7 @@ public class PerlinNoise3d {
 
     public static void main(String[] args){
 
-        PerlinNoise3d perlinNoise = new PerlinNoise3d(true);
+        PerlinNoise3d perlinNoise = new PerlinNoise3d(true, 0.05f);
 
         double[][][] perlinValues = perlinNoise.perlin(800, 800, 800);
 

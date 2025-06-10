@@ -1,7 +1,8 @@
-package org.example;
+package org.example.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import texture.Texture;
 
 import static org.lwjgl.opengl.GL11.*;
 
