@@ -32,6 +32,11 @@ public class Renderer {
         chunk = generator.initChunk();
     }
 
+    private void drawTestBlock(){
+
+        cube.draw(CubeTextures.getCubeTextures("grass"), 0, 0, 0);
+    }
+
     private void drawChunk(){
 
         float y = 0;
@@ -86,5 +91,6 @@ public class Renderer {
         camera.update();
 
         drawChunk();
+//        drawTestBlock();
     }
 }

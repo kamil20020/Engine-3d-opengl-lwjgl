@@ -38,10 +38,10 @@ public class Cube extends Mesh{
     private static Integer[] getQuads(){
 
         Integer[] getQuads = new Integer[]{
-            1, 3, 2, 0, // bottom
+            1, 0, 2, 3, // bottom
             5, 7, 6, 4, // top
             1, 3, 7, 5, // front
-            0, 2, 6, 4, // back
+            2, 0, 4, 6, // back
             0, 1, 5, 4, // right
             3, 2, 6, 7  // left
         };
