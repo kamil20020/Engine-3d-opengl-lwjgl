@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class PerlinNoise2d {
 
-    private final Random random;
+    private Random random;
 
     private final int[] permutation = new int[512];
 

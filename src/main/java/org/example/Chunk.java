@@ -25,8 +25,6 @@ public class Chunk {
     private int vertexBufferId;
     private int visibleBlocks = 0;
 
-    private static final Cube cube = new Cube(16);
-
     public static final int CHUNKS_2D_SIZE = 16 * 16;
     public static final int CHUNKS_HEIGHT = 384;
     public static final int CHUNKS_SIZE = CHUNKS_2D_SIZE * CHUNKS_HEIGHT;
@@ -135,7 +133,7 @@ public class Chunk {
                 float v = getGlobalTextureCord(CubeTextures.COMBINED_TEXTURE_TOTAL_HEIGHT, textureCord.y, texturePosition.row());
 
                 verticesBuffer.put(vertex.x + x).put(vertex.y + y).put(vertex.z + z);
-                verticesBuffer.put(textureCord.x).put(textureCord.y);
+                verticesBuffer.put(u).put(v);
             }
         }
     }
