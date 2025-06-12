@@ -3,31 +3,59 @@
     "id": "air"
   },
   {
+    "id": "dirt",
+	"defaultTexture": {
+		"name": "dirt.png",
+		"row": 0,
+		"col": 0
+	}
+  },
+  {
     "id": "grass",
-    "texturesNames": [
-      "textures/dirt.png",
-      "textures/grass_block_top.jpg",
+    "textures": [
+	  {
+		"name": "dirt.png",
+		"row": 0,
+		"col": 0
+	  },
+	  {
+		"name": "grass_block_top.png",
+		"row": 0,
+		"col": 2
+	  },
       null,
       null,
       null,
       null
     ],
-    "defaultTextureName": "textures/grass_block_side.png"
-  },
-  {
-    "id": "dirt",
-    "defaultTextureName": "textures/dirt.png"
+    "defaultTexture": {
+		"name": "grass_block_side.png",
+		"row": 0,
+		"col": 1
+	}
   },
   {
     "id": "sand",
-    "defaultTextureName": "textures/sand.png"
+	"defaultTexture": {
+		"name": "sand.png",
+		"row": 0,
+		"col": 4
+	}
   },
   {
     "id": "gravel",
-    "defaultTextureName": "textures/gravel.png"
+	"defaultTexture": {
+		"name": "gravel.png",
+		"row": 0,
+		"col": 3
+	}
   },
   {
     "id": "granite",
-    "defaultTextureName": "textures/granite.png"
+	"defaultTexture": {
+		"name": "granite.png",
+		"row": 0,
+		"col": 5
+	}
   }
 ]

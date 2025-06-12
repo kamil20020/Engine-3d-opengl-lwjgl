@@ -85,10 +85,10 @@ public class Camera {
             destination.y -= time;
         }
 
-        System.out.println("eye: " + eye);
-        System.out.println("forward: " + getForward());
-        System.out.println("dest: " + destination);
-        System.out.println("angle: " + angle);
+//        System.out.println("eye: " + eye);
+//        System.out.println("forward: " + getForward());
+//        System.out.println("dest: " + destination);
+//        System.out.println("angle: " + angle);
     }
 
     private void handleWasd(Set<Integer> pressedKeyboardKeys){

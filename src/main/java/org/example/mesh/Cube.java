@@ -10,7 +10,7 @@ public class Cube extends Mesh{
         super(getVertices(a), getQuads(), getTextureCords(), getTextureCordsForVertices());
     }
 
-    private static Vector3f[] getVertices(int a){
+    public static Vector3f[] getVertices(int a){
 
         int x = 0;
         int y = 0;
@@ -35,7 +35,7 @@ public class Cube extends Mesh{
         return vertices;
     }
 
-    private static Integer[] getQuads(){
+    public static Integer[] getQuads(){
 
         Integer[] getQuads = new Integer[]{
             1, 0, 2, 3, // bottom
@@ -49,7 +49,7 @@ public class Cube extends Mesh{
         return getQuads;
     }
 
-    private static Vector2f[] getTextureCords(){
+    public static Vector2f[] getTextureCords(){
 
         Vector2f[] textureCords = new Vector2f[24];
 
@@ -61,7 +61,7 @@ public class Cube extends Mesh{
         return textureCords;
     }
 
-    private static Integer[] getTextureCordsForVertices(){
+    public static Integer[] getTextureCordsForVertices(){
 
         Integer[] textureCordsForVertices = new Integer[]{
             0, 1, 2, 3,

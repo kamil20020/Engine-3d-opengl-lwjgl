@@ -9,21 +9,21 @@ import static org.lwjgl.opengl.GL11.*;
 public class Mesh {
 
     private final Vector3f[] vertices;
-    private final Integer[] triangles;
+    private final Integer[] quads;
     private final Vector2f[] textureCords;
     private final Integer[] textureCordsForVertices;
 
-    public Mesh(Vector3f[] vertices, Integer[] triangles, Vector2f[] textureCords,  Integer[] textureCordsForVertices){
+    public Mesh(Vector3f[] vertices, Integer[] quads, Vector2f[] textureCords, Integer[] textureCordsForVertices){
 
         this.vertices = vertices;
-        this.triangles = triangles;
+        this.quads = quads;
         this.textureCords = textureCords;
         this.textureCordsForVertices = textureCordsForVertices;
     }
 
     public void draw(int[] textures, float xMin, float yMin, float zMin){
 
-        for(int i = 0, textureIndex = 0; i < triangles.length; i += 4, textureIndex++){
+        for(int i = 0, textureIndex = 0; i < quads.length; i += 4, textureIndex++){
 
             int texture = textures[textureIndex];
 
@@ -33,7 +33,7 @@ public class Mesh {
 
             for(int j = 0; j < 4; j++){
 
-                int vIndex = triangles[i + j];
+                int vIndex = quads[i + j];
 
                 Vector3f v = vertices[vIndex];
 

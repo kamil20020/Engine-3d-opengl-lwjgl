@@ -14,18 +14,24 @@ public class Generator {
         terrainNoiseGenerator = new PerlinNoise3d(seed, 0.08f);
     }
 
+    public Generator(){
+
+        heightNoiseGenerator = new PerlinNoise2d(false, 0.05f);
+        terrainNoiseGenerator = new PerlinNoise3d(false, 0.08f);
+    }
+
     public byte[][][] initChunk(){
 
-        byte[][][] chunk = new byte[384][16][16];
+        byte[][][] chunk = new byte[Chunk.CHUNKS_HEIGHT][16][16];
 
         double[][] heightsNoise = heightNoiseGenerator.perlin(16, 16);
-        double[][][] terrainNoise = terrainNoiseGenerator.perlin(16, 384, 16);
+        double[][][] terrainNoise = terrainNoiseGenerator.perlin(16, Chunk.CHUNKS_HEIGHT, 16);
 
         for(int x = 0; x < 16; x++){
 
             for(int z = 0; z < 16; z++){
 
-                double maxHeight = (heightsNoise[x][z] * 384) % 384;
+                double maxHeight = (heightsNoise[x][z] * Chunk.CHUNKS_HEIGHT) % Chunk.CHUNKS_HEIGHT;
 
                 for(int y = 0; y < maxHeight; y++){
 
