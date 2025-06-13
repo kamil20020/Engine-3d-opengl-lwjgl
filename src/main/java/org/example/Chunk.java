@@ -26,13 +26,13 @@ public class Chunk {
     private int visibleBlocks = 0;
 
     public static final int CHUNKS_2D_SIZE = 16 * 16;
-    public static final int CHUNKS_HEIGHT = 384;
+    public static final int CHUNKS_HEIGHT = 128;
     public static final int CHUNKS_SIZE = CHUNKS_2D_SIZE * CHUNKS_HEIGHT;
 
     public Chunk(Vector2f downLeftPos, Generator generator){
 
         this.downLeftPos = downLeftPos;
-        this.chunk = generator.initChunk();
+        this.chunk = generator.initChunk((int) downLeftPos.x, (int) downLeftPos.y);
     }
 
     public void init(){
@@ -142,7 +142,7 @@ public class Chunk {
 
         byte blockType = chunk[i][j][k];
 
-        return blockType == 0 || isBlockHidden(j, i, k);
+        return blockType == 0; //|| isBlockHidden(j, i, k);
     }
 
     private int[] getCubeTexturesIndexes(byte blockType){

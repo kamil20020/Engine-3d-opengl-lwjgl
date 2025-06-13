@@ -22,8 +22,6 @@ public class Renderer {
 
     private final Generator generator;
 
-    private static final Cube cube = new Cube(16);
-
     private static final int DEFAULT_NUMBER_OF_CHUNKS = 5;
 
     public Renderer(Window window, EventsHandler eventsHandler){
@@ -75,40 +73,6 @@ public class Renderer {
         }
     }
 
-    private void drawChunks(){
-
-        int y = 0;
-
-        for(int i=0; i < 128; i++){
-
-            float x = 0;
-
-            for(int j=0; j < 16; j++){
-
-                float z = 0;
-
-                for(int k=0; k < 16; k++){
-
-//                    for(Chunk chunk : chunks){
-//
-//                        chunk.draw(i, j, k, x, y, z);
-//                    }
-
-                    z += 16;
-                }
-
-                x += 16;
-            }
-
-            y += 16;
-        }
-    }
-
-    private void drawTestBlock(){
-
-//        cube.draw(CubeTextures.getCubeTextures("grass"), 0, 0, 0);
-    }
-
     public void render(){
 
         glMatrixMode(GL_MODELVIEW);
@@ -117,13 +81,9 @@ public class Renderer {
         camera.update();
 
         for(Chunk chunk : chunks){
-//
+
             chunk.draw();
 //            chunks.get(0).draw();
         }
-
-//        drawChunks();
-
-//        drawTestBlock();
     }
 }

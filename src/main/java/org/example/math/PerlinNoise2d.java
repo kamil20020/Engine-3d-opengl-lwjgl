@@ -66,7 +66,7 @@ public class PerlinNoise2d {
         }
     }
 
-    public double[][] perlin(int width, int height){
+    public double[][] perlin(int minX, int width, int minY, int height){
 
         double[][] results = new double[height][width];
 
@@ -74,8 +74,8 @@ public class PerlinNoise2d {
 
             for (int j = 0; j < width; j++) {
 
-                double x = (double) j * scale;
-                double y = (double) i * scale;
+                double x = (double) (j + minX) * scale;
+                double y = (double) (i + minY) * scale;
 
                 double perlinValue = perlin(x, y);
                 double normalizedValue = (perlinValue + 1d) / 2d;
@@ -120,6 +120,9 @@ public class PerlinNoise2d {
 
     private int[] getGradientOnPosition(int x, int y){
 
+        x = Math.abs(x);
+        y = Math.abs(y);
+
         int hash = permutation[x + permutation[y]];
 
         int index = hash % gradients.length;
@@ -149,7 +152,7 @@ public class PerlinNoise2d {
 
         PerlinNoise2d perlinNoise = new PerlinNoise2d(true, 0.05f);
 
-        double[][] perlinValues = perlinNoise.perlin(800, 800);
+        double[][] perlinValues = perlinNoise.perlin(0, 800, 0, 800);
 
         for(int i = 0; i < 100; i++){
 

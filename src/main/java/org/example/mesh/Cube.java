@@ -53,10 +53,10 @@ public class Cube extends Mesh{
 
         Vector2f[] textureCords = new Vector2f[24];
 
-        textureCords[0]  = new Vector2f(0.0f, 0.0f);
-        textureCords[1]  = new Vector2f(1.0f, 0.0f);
-        textureCords[2]  = new Vector2f(1.0f, 1.0f);
-        textureCords[3]  = new Vector2f(0.0f, 1.0f);
+        textureCords[0] = new Vector2f(0.0f, 0.0f);
+        textureCords[1] = new Vector2f(1.0f, 0.0f);
+        textureCords[2] = new Vector2f(1.0f, 1.0f);
+        textureCords[3] = new Vector2f(0.0f, 1.0f);
 
         return textureCords;
     }

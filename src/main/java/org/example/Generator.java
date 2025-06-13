@@ -5,70 +5,124 @@ import org.example.math.PerlinNoise3d;
 
 public class Generator {
 
-    private final PerlinNoise2d heightNoiseGenerator;
+    private final PerlinNoise2d undergroundHeightNoiseGenerator;
+    private final PerlinNoise3d undergroundNoiseGenerator;
+
+    private final PerlinNoise2d terrainHeightNoiseGenerator;
     private final PerlinNoise3d terrainNoiseGenerator;
+
+    private static final float UNDERGROUND_NOISE_GENERATOR_SCALE = 0.15f;
+    private static final float UNDERGROUND_HEIGHT_NOISE_GENERATOR_SCALE = 0.02f;
+
+    private static final float TERRAIN_NOISE_GENERATOR_SCALE = 0.04f;
+    private static final float TERRAIN_HEIGHT_NOISE_GENERATOR_SCALE = 0.02f;
 
     public Generator(long seed){
 
-        heightNoiseGenerator = new PerlinNoise2d(seed, 0.05f);
-        terrainNoiseGenerator = new PerlinNoise3d(seed, 0.08f);
+        undergroundNoiseGenerator = new PerlinNoise3d(seed, UNDERGROUND_NOISE_GENERATOR_SCALE);
+        undergroundHeightNoiseGenerator = new PerlinNoise2d(seed, UNDERGROUND_HEIGHT_NOISE_GENERATOR_SCALE);
+
+        terrainNoiseGenerator = new PerlinNoise3d(seed, TERRAIN_NOISE_GENERATOR_SCALE);
+        terrainHeightNoiseGenerator = new PerlinNoise2d(seed, TERRAIN_HEIGHT_NOISE_GENERATOR_SCALE);
     }
 
     public Generator(){
 
-        heightNoiseGenerator = new PerlinNoise2d(false, 0.05f);
-        terrainNoiseGenerator = new PerlinNoise3d(false, 0.08f);
+        undergroundNoiseGenerator = new PerlinNoise3d(false, UNDERGROUND_NOISE_GENERATOR_SCALE);
+        undergroundHeightNoiseGenerator = new PerlinNoise2d(false, UNDERGROUND_HEIGHT_NOISE_GENERATOR_SCALE);
+
+        terrainNoiseGenerator = new PerlinNoise3d(false, TERRAIN_NOISE_GENERATOR_SCALE);
+        terrainHeightNoiseGenerator = new PerlinNoise2d(false, TERRAIN_HEIGHT_NOISE_GENERATOR_SCALE);
     }
 
-    public byte[][][] initChunk(){
+    public byte[][][] initChunk(int chunkX, int chunkZ){
 
         byte[][][] chunk = new byte[Chunk.CHUNKS_HEIGHT][16][16];
 
-        double[][] heightsNoise = heightNoiseGenerator.perlin(16, 16);
-        double[][][] terrainNoise = terrainNoiseGenerator.perlin(16, Chunk.CHUNKS_HEIGHT, 16);
+        double[][] undergroundHeightNoise = undergroundHeightNoiseGenerator.perlin(chunkX, 16, chunkZ, 16);
+        double[][][] undergroundNoise = undergroundNoiseGenerator.perlin(chunkX, 16, 0, Chunk.CHUNKS_HEIGHT - 5, chunkZ, 16);
+
+        double[][] terrainHeightNoise = terrainHeightNoiseGenerator.perlin(chunkX, 16, chunkZ, 16);
+        double[][][] terrainNoise = terrainNoiseGenerator.perlin(chunkX, 16,Chunk.CHUNKS_HEIGHT - 5, 5, chunkZ, 16);
 
         for(int x = 0; x < 16; x++){
 
             for(int z = 0; z < 16; z++){
 
-                double maxHeight = (heightsNoise[x][z] * Chunk.CHUNKS_HEIGHT) % Chunk.CHUNKS_HEIGHT;
+                int maxUndergroundHeight = (int) Math.ceil((undergroundHeightNoise[x][z] * (Chunk.CHUNKS_HEIGHT - 5) % (Chunk.CHUNKS_HEIGHT - 5)));
 
-                for(int y = 0; y < maxHeight; y++){
+                for(int y = 0; y < maxUndergroundHeight; y++){
+
+                    double undergroundNoiseValue = undergroundNoise[y][x][z];
+
+                    byte blockType = getBlockTypeForUnderground(undergroundNoiseValue);
+
+                    chunk[y][x][z] = blockType;
+                }
+
+                int maxTerrainHeight = (int) Math.ceil((terrainHeightNoise[x][z] * (5) % (5)));
+
+                for(int y = 0; y < maxTerrainHeight; y++){
 
                     double terrainNoiseValue = terrainNoise[y][x][z];
 
                     byte blockType = getBlockType(terrainNoiseValue);
 
-                    chunk[y][x][z] = blockType;
+                    chunk[y + maxUndergroundHeight][x][z] = blockType;
                 }
+
+                chunk[(int) (maxUndergroundHeight + maxTerrainHeight - 1)][x][z] = 3;
             }
         }
 
         return chunk;
     }
 
+    private byte getBlockTypeForUnderground(double noiseValue){
+
+        byte blockType = 0;
+
+        if(noiseValue < 0.2d){
+
+            blockType = 0;
+        }
+        else if(noiseValue < 0.25d){
+
+            blockType = 1;
+        }
+        else if(noiseValue < 0.30d){
+
+            blockType = 5;
+        }
+        else if(noiseValue < 0.35d){
+
+            blockType = 6;
+        }
+        else{
+            blockType = 2;
+        }
+
+        return blockType;
+    }
+
     private byte getBlockType(double terrainNoiseValue){
 
         byte blockType = 0;
 
-        if(terrainNoiseValue < 0.2d){
+        if(terrainNoiseValue < 0.1d){
 
             blockType = 0;
         }
-        else if(terrainNoiseValue < 0.4d){
+        else if(terrainNoiseValue < 0.2d){
 
-            blockType = 1;
+            blockType = 4;
         }
-        else if(terrainNoiseValue < 0.6d){
+        else if(terrainNoiseValue < 0.3d){
 
-            blockType = 2;
-        }
-        else if(terrainNoiseValue < 0.8d){
-
-            blockType = 3;
+            blockType = 5;
         }
         else{
-            blockType = 4;
+            blockType = 1;
         }
 
         return blockType;

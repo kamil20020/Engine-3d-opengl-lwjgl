@@ -26,7 +26,7 @@ public interface Texture {
 
         for (int y = height - 1; y >= 0; y--) {
 
-            for (int x = width - 1; x >= 0; x--) {
+            for (int x = 0; x < width; x++) {
 
                 int pixel = bufferedImage.getRGB(x, y); // ARGB
 
