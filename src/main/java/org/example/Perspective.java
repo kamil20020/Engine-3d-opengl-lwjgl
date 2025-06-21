@@ -14,7 +14,7 @@ public class Perspective {
 
         float aspectRatio = (float) width / (float) height;
 
-        Matrix4f perspectiveMatrix = new Matrix4f().setPerspective(90, aspectRatio, 0.1f, 1000);
+        Matrix4f perspectiveMatrix = new Matrix4f().setPerspective(90, aspectRatio, 0.1f, 10000);
 
         FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(16);
         perspectiveMatrix.get(floatBuffer);

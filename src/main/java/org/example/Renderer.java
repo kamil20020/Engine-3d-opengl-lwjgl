@@ -27,7 +27,7 @@ public class Renderer {
     public Renderer(Window window, EventsHandler eventsHandler){
 
         this.window = window;
-        this.camera = new Camera(new Vector3f(0, 0, -50), eventsHandler);
+        this.camera = new Camera(new Vector3f(0, 200, -50), eventsHandler);
         this.generator = new Generator();
     }
 
@@ -71,6 +71,12 @@ public class Renderer {
 
             chunkPos.x = chunkPos.x + 256;
         }
+
+//        Chunk chunk = new Chunk(chunkPos, generator);
+////
+//        chunk.init();
+//
+//        chunks.add(chunk);
     }
 
     public void render(){

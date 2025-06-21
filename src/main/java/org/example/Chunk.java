@@ -10,6 +10,7 @@ import texture.Texture;
 import texture.TexturePosition;
 
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -49,21 +50,21 @@ public class Chunk {
         Vector2f[] textureCords = Cube.getTextureCords();
         Integer[] texturesForVertices = Cube.getTextureCordsForVertices();
 
-        int y = 0;
+        float x = downLeftPos.x;
 
-        for(int i=0; i < chunk.length; i++){
+        for(int xI=0; xI < 16; xI++){
 
-            float x = downLeftPos.x;
+            float z = downLeftPos.y;
 
-            for(int j=0; j < chunk[i].length; j++){
+            for(int zI=0; zI < 16; zI++){
 
-                float z = downLeftPos.y;
+                float y = 0;
 
-                for(int k=0; k < chunk[i][j].length; k++){
+                for(int yI=0; yI < CHUNKS_HEIGHT; yI++){
 
-                    byte blockType = chunk[i][j][k];
+                    byte blockType = chunk[yI][zI][xI];
 
-                    if(shouldNotDrawBlock(i, j, k)){
+                    if(shouldNotDrawBlock(yI, zI, xI)){
                         continue;
                     }
 
@@ -71,13 +72,13 @@ public class Chunk {
 
                     visibleBlocks++;
 
-                    z += 16;
+                    y += 16;
                 }
 
-                x += 16;
+                z += 16;
             }
 
-            y += 16;
+            x += 16;
         }
 
         verticesBuffer.flip();
