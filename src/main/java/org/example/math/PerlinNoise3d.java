@@ -55,7 +55,7 @@ public class PerlinNoise3d {
 
         for(int i = 0; i < 256; i++){
 
-            int j = random.nextInt(256 - i);
+            int j = i + random.nextInt(256 - i);
 
             swap(permutation, i, j);
         }
@@ -100,9 +100,9 @@ public class PerlinNoise3d {
         int z0 = (int) Math.floor(z);
         int z1 = z0 + 1;
 
-        double sx = x - (double) x0;
-        double sy = y - (double) y0;
-        double sz = z - (double) z0;
+        double sx = fade(x - (double) x0);
+        double sy = fade(y - (double) y0);
+        double sz = fade(z - (double) z0);
 
         double n0 = dotProductGridGradient(x0, y0, z0, x, y, z);
         double n1 = dotProductGridGradient(x1, y0, z0, x, y, z);
@@ -139,11 +139,11 @@ public class PerlinNoise3d {
 
     private int[] getGradientOnPosition(int x, int y, int z){
 
-        x = Math.abs(x);
-        y = Math.abs(y);
-        z = Math.abs(z);
+        x = ((x % 256) + 256) % 256;
+        y = ((y % 256) + 256) % 256;
+        z = ((z % 256) + 256) % 256;
 
-        int hash = permutation[z + permutation[x + permutation[y]]];
+        int hash = permutation[x + permutation[y + permutation[z]]];
 
         int index = hash % gradients.length;
 
@@ -153,6 +153,11 @@ public class PerlinNoise3d {
     private static double lerp(double a0, double a1, double w){
 
         return (1f - w) * a0 + w * a1;
+    }
+
+    private static double fade(double t) {
+
+        return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
     private static double dotProduct(double ax, double ay, double bx, double by, double cx, double cy){

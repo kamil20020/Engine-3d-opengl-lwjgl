@@ -7,7 +7,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CubeTexturesInfo(
 
-    String name,
+    String id,
     List<CubeTexture> textures,
     CubeTexture defaultTexture
 ){}

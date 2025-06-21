@@ -55,7 +55,7 @@ public class PerlinNoise2d {
 
         for(int i = 0; i < 256; i++){
 
-            int j = random.nextInt(256 - i);
+            int j = i + random.nextInt(256 - i);
 
             swap(permutation, i, j);
         }
@@ -94,8 +94,8 @@ public class PerlinNoise2d {
         int y0 = (int) Math.floor(y);
         int y1 = y0 + 1;
 
-        double sx = x - (double) x0;
-        double sy = y - (double) y0;
+        double sx = fade(x - (double) x0);
+        double sy = fade(y - (double) y0);
 
         double n0 = dotProductGridGradient(x0, y0, x, y);
         double n1 = dotProductGridGradient(x1, y0, x, y);
@@ -120,8 +120,8 @@ public class PerlinNoise2d {
 
     private int[] getGradientOnPosition(int x, int y){
 
-        x = Math.abs(x);
-        y = Math.abs(y);
+        x = ((x % 256) + 256) % 256;
+        y = ((y % 256) + 256) % 256;
 
         int hash = permutation[x + permutation[y]];
 
@@ -133,6 +133,11 @@ public class PerlinNoise2d {
     private static double lerp(double a0, double a1, double w){
 
         return (1f - w) * a0 + w * a1;
+    }
+
+    private static double fade(double t) {
+
+        return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
     private static double dotProduct(double ax, double ay, double bx, double by){

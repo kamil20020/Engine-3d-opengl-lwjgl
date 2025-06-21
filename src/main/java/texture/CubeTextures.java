@@ -10,6 +10,7 @@ public class CubeTextures{
     public static final Integer COMBINED_TEXTURE_TOTAL_WIDTH = 112;
     public static final Integer COMBINED_TEXTURE_TOTAL_HEIGHT = 16;
 
+    private static final Map<String, Byte> cubeTexturesNames = new HashMap<>();
     private static final List<int[]> cubeTextures = new ArrayList<>();
     private static final Map<Integer, TexturePosition> texturesPositions = new HashMap<>();
 
@@ -21,6 +22,8 @@ public class CubeTextures{
 
         List<CubeTexturesInfo> allCubeTexturesInfos = JsonFileLoader.loadList(TEXTURES_MAPPINGS_FILE_PATH, typeReference);
 
+        byte index = 0;
+
         for (CubeTexturesInfo cubeTexturesInfo : allCubeTexturesInfos) {
 
             List<CubeTexture> inputCubeTextures = cubeTexturesInfo.textures();
@@ -31,6 +34,10 @@ public class CubeTextures{
             int[] cubeTexturesIds = loadTextures(inputCubeTextures, defaultTextureIndex);
 
             cubeTextures.add(cubeTexturesIds);
+
+            cubeTexturesNames.put(cubeTexturesInfo.id(), index);
+
+            index++;
         }
     }
 
@@ -99,9 +106,21 @@ public class CubeTextures{
         return texturesPositions.get(textureIndex);
     }
 
-    public static int[] getCubeTextures(byte textureOrder){
+    public static byte getCubeTextureIndex(String cubeTextureName){
 
-        return cubeTextures.get(textureOrder);
+        return cubeTexturesNames.get(cubeTextureName);
+    }
+
+    public static int[] getCubeTextures(byte cubeTextureIndex){
+
+        return cubeTextures.get(cubeTextureIndex);
+    }
+
+    public static int[] getCubeTextures(String cubeTextureName){
+
+        byte cubeTextureIndex = cubeTexturesNames.get(cubeTextureName);
+
+        return cubeTextures.get(cubeTextureIndex);
     }
 
 }

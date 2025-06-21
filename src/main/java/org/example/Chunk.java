@@ -32,7 +32,7 @@ public class Chunk {
     public Chunk(Vector2f downLeftPos, Generator generator){
 
         this.downLeftPos = downLeftPos;
-        this.chunk = generator.initChunk((int) downLeftPos.x, (int) downLeftPos.y);
+        this.chunk = generator.initChunk((int) (downLeftPos.x / 16), (int) (downLeftPos.y / 16));
     }
 
     public void init(){

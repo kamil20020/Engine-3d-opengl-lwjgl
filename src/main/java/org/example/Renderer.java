@@ -47,8 +47,8 @@ public class Renderer {
         int numberOfChunksInOneSide = 2 * DEFAULT_NUMBER_OF_CHUNKS + 1;
 
         float chunk2dSize = Chunk.CHUNKS_2D_SIZE;
-        float halfChunkSize = chunk2dSize / 2;
-        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * chunk2dSize - halfChunkSize;
+        float halfChunkSize = 8;
+        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * 256 - 128;
 
         Vector2f chunkPos = new Vector2f(minChunksCord, minChunksCord);
 
@@ -66,10 +66,10 @@ public class Renderer {
 
                 chunks.add(chunk);
 
-                chunkPos.y = chunkPos.y + chunk2dSize;
+                chunkPos.y = chunkPos.y + 256;
             }
 
-            chunkPos.x = chunkPos.x + chunk2dSize;
+            chunkPos.x = chunkPos.x + 256;
         }
     }
 

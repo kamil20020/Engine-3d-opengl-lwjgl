@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.math.PerlinNoise2d;
 import org.example.math.PerlinNoise3d;
+import texture.CubeTextures;
 
 public class Generator {
 
@@ -60,7 +61,7 @@ public class Generator {
                     chunk[y][x][z] = blockType;
                 }
 
-                int maxTerrainHeight = (int) Math.ceil((terrainHeightNoise[x][z] * (5) % (5)));
+                int maxTerrainHeight = (int)(terrainHeightNoise[x][z] * (5) % (5));
 
                 for(int y = 0; y < maxTerrainHeight; y++){
 
@@ -69,6 +70,11 @@ public class Generator {
                     byte blockType = getBlockType(terrainNoiseValue);
 
                     chunk[y + maxUndergroundHeight][x][z] = blockType;
+                }
+
+                if(maxUndergroundHeight + maxTerrainHeight - 1 < 0){
+
+                    continue;
                 }
 
                 chunk[(int) (maxUndergroundHeight + maxTerrainHeight - 1)][x][z] = 3;
@@ -80,51 +86,51 @@ public class Generator {
 
     private byte getBlockTypeForUnderground(double noiseValue){
 
-        byte blockType = 0;
+        String blockType = null;
 
         if(noiseValue < 0.2d){
 
-            blockType = 0;
+            blockType = "air";
         }
         else if(noiseValue < 0.25d){
 
-            blockType = 1;
+            blockType = "dirt";
         }
         else if(noiseValue < 0.30d){
 
-            blockType = 5;
+            blockType = "gravel";
         }
         else if(noiseValue < 0.35d){
 
-            blockType = 6;
+            blockType = "granite";
         }
         else{
-            blockType = 2;
+            blockType = "stone";
         }
 
-        return blockType;
+        return CubeTextures.getCubeTextureIndex(blockType);
     }
 
     private byte getBlockType(double terrainNoiseValue){
 
-        byte blockType = 0;
+        String blockType = null;
 
         if(terrainNoiseValue < 0.1d){
 
-            blockType = 0;
+            blockType = "air";
         }
         else if(terrainNoiseValue < 0.2d){
 
-            blockType = 4;
+            blockType = "sand";
         }
         else if(terrainNoiseValue < 0.3d){
 
-            blockType = 5;
+            blockType = "gravel";
         }
         else{
-            blockType = 1;
+            blockType = "dirt";
         }
 
-        return blockType;
+        return CubeTextures.getCubeTextureIndex(blockType);
     }
 }
