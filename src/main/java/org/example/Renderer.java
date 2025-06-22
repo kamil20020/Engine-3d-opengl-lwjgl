@@ -1,13 +1,11 @@
 package org.example;
 
-import org.example.mesh.Cube;
+import org.example.generator.CombinedGenerator;
 import org.example.shaders.ShaderUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import texture.CubeTextures;
 import texture.Texture;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +18,21 @@ public class Renderer {
     private final Camera camera;
     private final List<Chunk> chunks = new ArrayList<>();
 
-    private final Generator generator;
+    private final CombinedGenerator combinedGenerator;
 
     private static final int DEFAULT_NUMBER_OF_CHUNKS = 5;
 
     public Renderer(Window window, EventsHandler eventsHandler){
 
         this.window = window;
-        this.camera = new Camera(new Vector3f(0, 200, -50), eventsHandler);
-        this.generator = new Generator();
+        this.camera = new Camera(new Vector3f(0, 0, 0), eventsHandler);
+        this.combinedGenerator = new CombinedGenerator(123);
     }
 
     public void init(){
 
         glEnable(GL_TEXTURE_2D);
-//
+
         int textureId = Texture.createTexture("textures/textures.png");
         Texture.useTexture(textureId);
 
@@ -43,12 +41,11 @@ public class Renderer {
 
         int texLocation = glGetUniformLocation(shaderProgram, "texture0");
         glUniform1i(texLocation, 0); // GL_TEXTURE0
-//
+
         int numberOfChunksInOneSide = 2 * DEFAULT_NUMBER_OF_CHUNKS + 1;
 
         float chunk2dSize = Chunk.CHUNKS_2D_SIZE;
-        float halfChunkSize = 8;
-        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * 256 - 128;
+        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * chunk2dSize - chunk2dSize / 2;
 
         Vector2f chunkPos = new Vector2f(minChunksCord, minChunksCord);
 
@@ -60,23 +57,17 @@ public class Renderer {
 
                 Vector2f chunkPosCopy = new Vector2f(chunkPos);
 
-                Chunk chunk = new Chunk(chunkPosCopy, generator);
+                Chunk chunk = new Chunk(chunkPosCopy, combinedGenerator);
 
                 chunk.init();
 
                 chunks.add(chunk);
 
-                chunkPos.y = chunkPos.y + 256;
+                chunkPos.y = chunkPos.y + chunk2dSize;
             }
 
-            chunkPos.x = chunkPos.x + 256;
+            chunkPos.x = chunkPos.x + chunk2dSize;
         }
-
-//        Chunk chunk = new Chunk(chunkPos, generator);
-////
-//        chunk.init();
-//
-//        chunks.add(chunk);
     }
 
     public void render(){
@@ -89,7 +80,6 @@ public class Renderer {
         for(Chunk chunk : chunks){
 
             chunk.draw();
-//            chunks.get(0).draw();
         }
     }
 }

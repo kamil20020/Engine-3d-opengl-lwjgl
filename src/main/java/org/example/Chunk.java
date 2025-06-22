@@ -1,16 +1,14 @@
 package org.example;
 
+import org.example.generator.CombinedGenerator;
 import org.example.mesh.Cube;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import texture.CubeTexture;
 import texture.CubeTextures;
-import texture.Texture;
 import texture.TexturePosition;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -19,8 +17,8 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Chunk {
 
-    private byte[][][] chunk;
-    private Vector2f downLeftPos;
+    private final byte[][][] chunk;
+    private final Vector2f downLeftPos;
 
     private int vertexArraysId;
     private int vertexBufferId;
@@ -30,10 +28,10 @@ public class Chunk {
     public static final int CHUNKS_HEIGHT = 128;
     public static final int CHUNKS_SIZE = CHUNKS_2D_SIZE * CHUNKS_HEIGHT;
 
-    public Chunk(Vector2f downLeftPos, Generator generator){
+    public Chunk(Vector2f downLeftPos, CombinedGenerator combinedGenerator){
 
         this.downLeftPos = downLeftPos;
-        this.chunk = generator.initChunk((int) (downLeftPos.x / 16), (int) (downLeftPos.y / 16));
+        this.chunk = combinedGenerator.initChunk((int) (downLeftPos.x / 16), (int) (downLeftPos.y / 16));
     }
 
     public void init(){
@@ -64,7 +62,7 @@ public class Chunk {
 
                     byte blockType = chunk[yI][zI][xI];
 
-                    if(shouldNotDrawBlock(yI, zI, xI)){
+                    if(shouldNotDrawBlock(xI, yI, zI)){
                         continue;
                     }
 
@@ -139,11 +137,11 @@ public class Chunk {
         }
     }
 
-    private boolean shouldNotDrawBlock(int i, int j, int k){
+    private boolean shouldNotDrawBlock(int xI, int yI, int zI){
 
-        byte blockType = chunk[i][j][k];
+        byte blockType = chunk[yI][zI][xI];
 
-        return blockType == 0; //|| isBlockHidden(j, i, k);
+        return blockType == 0; //|| isBlockHidden(xI, yI, zI);
     }
 
     private int[] getCubeTexturesIndexes(byte blockType){
@@ -163,14 +161,14 @@ public class Chunk {
 
     private boolean isBlockHidden(int x, int y, int z){
 
-        return (x > 0 && chunk[y][x - 1][z] != 0) &&
-                (x < chunk[0].length - 1 && chunk[y][x + 1][z] != 0) &&
+        return (x > 0 && chunk[y][z][x - 1] != 0) &&
+                (x < chunk[0].length - 1 && chunk[y][z][x + 1] != 0) &&
 
-                (y > 0 && chunk[y - 1][x][z] != 0) &&
-                (y < chunk.length - 1 && chunk[y + 1][x][z] != 0) &&
+                (y > 0 && chunk[y - 1][z][x] != 0) &&
+                (y < chunk.length - 1 && chunk[y + 1][z][x] != 0) &&
 
-                (z > 0 && chunk[y][x][z - 1] != 0) &&
-                (z < chunk[0][0].length - 1 && chunk[y][x][z + 1] != 0);
+                (z > 0 && chunk[y][z - 1][x] != 0) &&
+                (z < chunk[0][0].length - 1 && chunk[y][z + 1][x] != 0);
     }
 
 }

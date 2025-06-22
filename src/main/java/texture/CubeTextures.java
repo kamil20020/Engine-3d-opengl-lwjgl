@@ -7,7 +7,7 @@ import java.util.*;
 
 public class CubeTextures{
 
-    public static final Integer COMBINED_TEXTURE_TOTAL_WIDTH = 112;
+    public static final Integer COMBINED_TEXTURE_TOTAL_WIDTH = 128;
     public static final Integer COMBINED_TEXTURE_TOTAL_HEIGHT = 16;
 
     private static final Map<String, Byte> cubeTexturesNames = new HashMap<>();

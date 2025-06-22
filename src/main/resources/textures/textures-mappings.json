@@ -65,5 +65,13 @@
 		"row": 0,
 		"col": 5
 	}
+  },
+  {
+	"id": "bedrock",
+	"defaultTexture": {
+		"name": "bedrock.png",
+		"row": 0,
+		"col": 7
+	}
   }
 ]
