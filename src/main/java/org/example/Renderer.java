@@ -4,7 +4,9 @@ import org.example.generator.CombinedGenerator;
 import org.example.shaders.ShaderUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import texture.CubeTextures;
 import texture.Texture;
+import texture.TexturesMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class Renderer {
     }
 
     public void init(){
+
+        TexturesMap.init();
+        CubeTextures.init();
 
         glEnable(GL_TEXTURE_2D);
 

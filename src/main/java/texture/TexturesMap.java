@@ -13,9 +13,14 @@ public class TexturesMap {
 
     private static final Map<String, TexturePosition> texturesPositionsMappings = new HashMap<>();
 
+    private static final byte COMBINED_TEXTURES_IN_ROW = 2;
+    private static final byte COMBINED_TEXTURES_IN_COL = 8;
+    public static final int COMBINED_TEXTURE_TOTAL_WIDTH = COMBINED_TEXTURES_IN_COL * 16;
+    public static final int COMBINED_TEXTURE_TOTAL_HEIGHT = COMBINED_TEXTURES_IN_ROW * 16;
+
     private static final String TEXTURES_FILE_PATH = "textures/textures.json";
 
-    static {
+    public static void init() {
 
         TypeReference<List<MapTexture>> typeReference = new TypeReference<>(){};
 
@@ -25,7 +30,7 @@ public class TexturesMap {
 
             String textureId = mapTexture.getId();
 
-            byte textureRow = mapTexture.getRow();
+            byte textureRow = (byte) (COMBINED_TEXTURES_IN_ROW - 1 - mapTexture.getRow());
             byte textureCol = mapTexture.getCol();
 
             TexturePosition texturePosition = new TexturePosition(textureRow, textureCol);

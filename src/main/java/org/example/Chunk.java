@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import texture.CubeTextures;
+import texture.MapTexture;
 import texture.TexturePosition;
 import texture.TexturesMap;
 
@@ -129,8 +130,8 @@ public class Chunk {
                 Integer texturesForVertex = texturesForVertices[quadIndex];
                 Vector2f textureCord = textureCords[texturesForVertex];
 
-                float u = getGlobalTextureCord(CubeTextures.COMBINED_TEXTURE_TOTAL_WIDTH, textureCord.x, texturePosition.col());
-                float v = getGlobalTextureCord(CubeTextures.COMBINED_TEXTURE_TOTAL_HEIGHT, textureCord.y, texturePosition.row());
+                float u = getGlobalTextureCord(TexturesMap.COMBINED_TEXTURE_TOTAL_WIDTH, textureCord.x, texturePosition.col());
+                float v = getGlobalTextureCord(TexturesMap.COMBINED_TEXTURE_TOTAL_HEIGHT, textureCord.y, texturePosition.row());
 
                 verticesBuffer.put(vertex.x + x).put(vertex.y + y).put(vertex.z + z);
                 verticesBuffer.put(u).put(v);
@@ -147,7 +148,7 @@ public class Chunk {
 
     private float getGlobalTextureCord(float maxGlobalCord, float localCord, int globalCordIndex){
 
-        return ((float) globalCordIndex * 16 + localCord * 16) / maxGlobalCord;
+        return (globalCordIndex * 16f + localCord * 16f) / maxGlobalCord;
     }
 
     private boolean isBlockHidden(int x, int y, int z){

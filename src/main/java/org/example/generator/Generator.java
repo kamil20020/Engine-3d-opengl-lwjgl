@@ -40,6 +40,7 @@ public abstract class Generator {
         int maxTerrainHeight = (int) (terrainHeightNoise[x][z] * terrainHeight) % terrainHeight;
 
         if(maxTerrainHeight <= 0){
+
             return maxTerrainHeight;
         }
 

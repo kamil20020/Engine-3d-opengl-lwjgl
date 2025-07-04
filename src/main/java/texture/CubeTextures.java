@@ -7,15 +7,12 @@ import java.util.*;
 
 public class CubeTextures{
 
-    public static final Integer COMBINED_TEXTURE_TOTAL_WIDTH = 128;
-    public static final Integer COMBINED_TEXTURE_TOTAL_HEIGHT = 16;
-
     private static final Map<String, Byte> cubeTexturesNames = new HashMap<>();
     private static final List<String[]> cubeTextures = new ArrayList<>();
 
     private static final String TEXTURES_MAPPINGS_FILE_PATH = "textures/textures-mappings.json";
 
-    static {
+    public static void init(){
 
         TypeReference<List<CubeTexturesInfo>> typeReference = new TypeReference<>(){};
 
