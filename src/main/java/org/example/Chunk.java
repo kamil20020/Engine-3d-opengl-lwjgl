@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import texture.CubeTextures;
 import texture.TexturePosition;
+import texture.TexturesMap;
 
 import java.nio.FloatBuffer;
 
@@ -110,15 +111,15 @@ public class Chunk {
 
     private void appendBlockToVerticesBuffer(byte blockType, float x, float y, float z, Vector3f[] vertices, Integer[] quads, Vector2f[] textureCords, Integer[] texturesForVertices, FloatBuffer verticesBuffer){
 
-        int[] cubeTexturesIndexes = getCubeTexturesIndexes(blockType);
+        String[] cubeTextures = CubeTextures.getCubeTextures(blockType);
 
         int quadIndex = 0;
 
         for(int i = 0; i < 6; i++){
 
-            int textureIndex = cubeTexturesIndexes[i];
+            String cubeTexture = cubeTextures[i];
 
-            TexturePosition texturePosition = getTexturePosition(textureIndex);
+            TexturePosition texturePosition = TexturesMap.getTexturePosition(cubeTexture);
 
             for(int j = 0; j < 4; j++, quadIndex++){
 
@@ -142,16 +143,6 @@ public class Chunk {
         byte blockType = chunk[yI][zI][xI];
 
         return blockType == 0; //|| isBlockHidden(xI, yI, zI);
-    }
-
-    private int[] getCubeTexturesIndexes(byte blockType){
-
-        return CubeTextures.getCubeTextures(blockType);
-    }
-
-    private TexturePosition getTexturePosition(int textureIndex){
-
-        return CubeTextures.getTexturePosition(textureIndex);
     }
 
     private float getGlobalTextureCord(float maxGlobalCord, float localCord, int globalCordIndex){

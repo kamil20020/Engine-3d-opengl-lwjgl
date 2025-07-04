@@ -4,74 +4,38 @@
   },
   {
     "id": "dirt",
-	"defaultTexture": {
-		"name": "dirt.png",
-		"row": 0,
-		"col": 0
-	}
+	"defaultTexture": "dirt"
   },
   {
 	"id": "stone",
-	"defaultTexture": {
-		"name": "stone.png",
-		"row": 0,
-		"col": 6
-	}
+	"defaultTexture": "stone"
   },
   {
     "id": "grass",
     "textures": [
-	  {
-		"name": "dirt.png",
-		"row": 0,
-		"col": 0
-	  },
-	  {
-		"name": "grass_block_top.png",
-		"row": 0,
-		"col": 2
-	  },
-      null,
-      null,
-      null,
-      null
+		"dirt",
+		"grass_block_top",
+		null,
+		null,
+		null,
+		null
     ],
-    "defaultTexture": {
-		"name": "grass_block_side.png",
-		"row": 0,
-		"col": 1
-	}
+    "defaultTexture": "grass_block_side"
   },
   {
     "id": "sand",
-	"defaultTexture": {
-		"name": "sand.png",
-		"row": 0,
-		"col": 4
-	}
+	"defaultTexture": "sand"
   },
   {
     "id": "gravel",
-	"defaultTexture": {
-		"name": "gravel.png",
-		"row": 0,
-		"col": 3
-	}
+	"defaultTexture": "gravel"
   },
   {
     "id": "granite",
-	"defaultTexture": {
-		"name": "granite.png",
-		"row": 0,
-		"col": 5
-	}
+	"defaultTexture": "granite"
   },
   {
 	"id": "bedrock",
-	"defaultTexture": {
-		"name": "bedrock.png",
-		"row": 0,
-		"col": 7
-	}
+	"defaultTexture": "bedrock"
   }
 ]

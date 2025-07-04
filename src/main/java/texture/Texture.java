@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
-public interface Texture {
+public abstract class Texture {
 
     public static int createTexture(String textureFileUrl){
 
@@ -95,4 +95,5 @@ public interface Texture {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
     }
+
 }

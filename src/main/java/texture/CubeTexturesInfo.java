@@ -8,6 +8,6 @@ import java.util.List;
 public record CubeTexturesInfo(
 
     String id,
-    List<CubeTexture> textures,
-    CubeTexture defaultTexture
+    List<String> textures,
+    String defaultTexture
 ){}

@@ -11,8 +11,7 @@ public class CubeTextures{
     public static final Integer COMBINED_TEXTURE_TOTAL_HEIGHT = 16;
 
     private static final Map<String, Byte> cubeTexturesNames = new HashMap<>();
-    private static final List<int[]> cubeTextures = new ArrayList<>();
-    private static final Map<Integer, TexturePosition> texturesPositions = new HashMap<>();
+    private static final List<String[]> cubeTextures = new ArrayList<>();
 
     private static final String TEXTURES_MAPPINGS_FILE_PATH = "textures/textures-mappings.json";
 
@@ -22,52 +21,50 @@ public class CubeTextures{
 
         List<CubeTexturesInfo> allCubeTexturesInfos = JsonFileLoader.loadList(TEXTURES_MAPPINGS_FILE_PATH, typeReference);
 
-        byte index = 0;
+        byte cubeTextureIndex = 0;
 
         for (CubeTexturesInfo cubeTexturesInfo : allCubeTexturesInfos) {
 
-            List<CubeTexture> inputCubeTextures = cubeTexturesInfo.textures();
-            CubeTexture defaultCubeTexture = cubeTexturesInfo.defaultTexture();
+            List<String> inputCubeTextures = cubeTexturesInfo.textures();
+            String defaultCubeTexture = cubeTexturesInfo.defaultTexture();
 
-            Integer defaultTextureIndex = loadTexture(defaultCubeTexture);
-
-            int[] cubeTexturesIds = loadTextures(inputCubeTextures, defaultTextureIndex);
+            String[] cubeTexturesIds = loadTextures(inputCubeTextures, defaultCubeTexture);
 
             cubeTextures.add(cubeTexturesIds);
 
-            cubeTexturesNames.put(cubeTexturesInfo.id(), index);
+            cubeTexturesNames.put(cubeTexturesInfo.id(), cubeTextureIndex);
 
-            index++;
+            cubeTextureIndex++;
         }
     }
 
-    private static int[] loadTextures(List<CubeTexture> inputCubeTextures, int defaultTextureIndex) throws IllegalStateException{
+    private static String[] loadTextures(List<String> inputCubeTextures, String defaultTexture) throws IllegalStateException{
 
-        int[] cubeTexturesIndexes = new int[6];
+        String[] cubeTexturesIndexes = new String[6];
 
         if(inputCubeTextures == null || inputCubeTextures.isEmpty()){
 
-            return loadTexturesAsDefault(defaultTextureIndex);
+            return loadTexturesAsDefault(defaultTexture);
         }
 
         for(int i = 0; i < 6; i++){
 
-            CubeTexture cubeTexture = inputCubeTextures.get(i);
+            String cubeTexture = inputCubeTextures.get(i);
 
-            int gotTextureId;
+            String gotTextureId;
 
             if(cubeTexture == null){
 
-                gotTextureId = defaultTextureIndex;
+                gotTextureId = defaultTexture;
             }
             else{
 
-                gotTextureId = loadTexture(cubeTexture);
+                gotTextureId = cubeTexture;
             }
 
-            if(gotTextureId == -1){
+            if(gotTextureId == null){
 
-                throw new IllegalStateException("Could not load texture " + cubeTexture);
+                throw new IllegalStateException("Could not load texture " + gotTextureId);
             }
 
             cubeTexturesIndexes[i] = gotTextureId;
@@ -76,34 +73,16 @@ public class CubeTextures{
         return cubeTexturesIndexes;
     }
 
-    private static int[] loadTexturesAsDefault(int defaultTextureIndex){
+    private static String[] loadTexturesAsDefault(String texture){
 
-        int[] cubeTexturesIds = new int[6];
+        String[] cubeTexturesIds = new String[6];
 
         for(int i = 0; i < 6; i++){
 
-            cubeTexturesIds[i] = defaultTextureIndex;
+            cubeTexturesIds[i] = texture;
         }
 
         return cubeTexturesIds;
-    }
-
-    private static int loadTexture(CubeTexture cubeTexture){
-
-        if(cubeTexture == null){
-            return -1;
-        }
-
-        TexturePosition texturePosition = new TexturePosition(cubeTexture.getRow(), cubeTexture.getCol());
-
-        texturesPositions.put(Byte.valueOf(cubeTexture.getCol()).intValue(), texturePosition);
-
-        return cubeTexture.getCol();
-    }
-
-    public static TexturePosition getTexturePosition(int textureIndex){
-
-        return texturesPositions.get(textureIndex);
     }
 
     public static byte getCubeTextureIndex(String cubeTextureName){
@@ -111,12 +90,12 @@ public class CubeTextures{
         return cubeTexturesNames.get(cubeTextureName);
     }
 
-    public static int[] getCubeTextures(byte cubeTextureIndex){
+    public static String[] getCubeTextures(byte cubeTextureIndex){
 
         return cubeTextures.get(cubeTextureIndex);
     }
 
-    public static int[] getCubeTextures(String cubeTextureName){
+    public static String[] getCubeTextures(String cubeTextureName){
 
         byte cubeTextureIndex = cubeTexturesNames.get(cubeTextureName);
 
