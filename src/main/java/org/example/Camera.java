@@ -24,13 +24,18 @@ public class Camera {
 
         this.eventsHandler = eventsHandler;
         this.eye = new Vector3f(position);
-        this.angle = new Vector3f(0, 90, 0);
+        this.angle = new Vector3f(0, 0, 0);
         this.top = new Vector3f(0, 1, 0);
         this.destination = new Vector3f(0, 0, 50);
 
         eventsHandler.addKeyboardCallback(this::moveCallback);
 
         updateDestination();
+    }
+
+    public Vector3f getPosition(){
+
+        return eye;
     }
 
     public void moveCallback(Set<Integer> pressedKeyboardKeys){
@@ -84,11 +89,6 @@ public class Camera {
             eye.y -= time;
             destination.y -= time;
         }
-
-//        System.out.println("eye: " + eye);
-//        System.out.println("forward: " + getForward());
-//        System.out.println("dest: " + destination);
-//        System.out.println("angle: " + angle);
     }
 
     private void handleWasd(Set<Integer> pressedKeyboardKeys){
