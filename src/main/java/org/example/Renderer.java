@@ -18,13 +18,15 @@ public class Renderer {
 
     private final Window window;
     private final Camera camera;
-    private final Vector3f downRenderPos = new Vector3f();
-    private final Vector3f topRenderPos = new Vector3f();
+    private final Vector3f downMaxRenderPos = new Vector3f();
+    private final Vector3f topMaxRenderPos = new Vector3f();
+    private final Vector3f downLocalRenderPos = new Vector3f();
+    private final Vector3f topLocalRenderPos = new Vector3f();
     private Chunk[][] chunks = new Chunk[DEFAULT_CHUNKS_WIDTH][DEFAULT_CHUNKS_WIDTH];
 
     private final CombinedGenerator combinedGenerator;
 
-    private static final int DEFAULT_NUMBER_OF_CHUNKS = 5;
+    private static final int DEFAULT_NUMBER_OF_CHUNKS = 8;
     private static final int DEFAULT_CHUNKS_WIDTH = DEFAULT_NUMBER_OF_CHUNKS * 2 + 1;
     private static final int DEFAULT_CHUNKS_AREA = DEFAULT_CHUNKS_WIDTH * DEFAULT_CHUNKS_WIDTH;
 
@@ -60,7 +62,7 @@ public class Renderer {
 
     private void initChunks(){
 
-        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * Chunk.CHUNKS_2D_SIZE - ((float) Chunk.CHUNKS_2D_SIZE) / 2;
+        float minChunksCord = -DEFAULT_NUMBER_OF_CHUNKS * Chunk.CHUNKS_2D_SIZE - Chunk.CHUNKS_2D_SIZE / 2f;
 
         Vector2f chunkPos = new Vector2f(minChunksCord, minChunksCord);
 
@@ -84,45 +86,51 @@ public class Renderer {
             chunkPos.x += Chunk.CHUNKS_2D_SIZE;
         }
 
-        downRenderPos.x = -((float) Chunk.CHUNKS_2D_SIZE) / 2;
-        downRenderPos.z = downRenderPos.x;
+        downMaxRenderPos.x = minChunksCord;
+        downMaxRenderPos.z = minChunksCord;
 
-        topRenderPos.x = -downRenderPos.x;
-        topRenderPos.z = -downRenderPos.x;
+        topMaxRenderPos.x = -minChunksCord;
+        topMaxRenderPos.z = -minChunksCord;
+
+        downLocalRenderPos.x = -Chunk.CHUNKS_2D_SIZE / 2f;
+        downLocalRenderPos.z = downLocalRenderPos.x;
+
+        topLocalRenderPos.x = -downLocalRenderPos.x;
+        topLocalRenderPos.z = -downLocalRenderPos.x;
     }
 
     private void handleChangedPosition(){
 
         Vector3f cameraPos = camera.getPosition();
 
-        Chunk[][] newChunks = chunks.clone();
+        if(cameraPos.x < downLocalRenderPos.x){
 
-        if(cameraPos.x < downRenderPos.x){
-
-            handleRefreshLessX(newChunks);
+            handleRefreshLessX();
         }
-        else if(cameraPos.x > topRenderPos.x){
+        else if(cameraPos.x > topLocalRenderPos.x){
 
-            handleRefreshMoreX(newChunks);
+            handleRefreshMoreX();
         }
 
-        if(cameraPos.z < downRenderPos.z){
+        if(cameraPos.z < downLocalRenderPos.z){
 
-            handleRefreshLessY(newChunks);
+            handleRefreshLessZ();
         }
-        else if(cameraPos.z > topRenderPos.z){
+        else if(cameraPos.z > topLocalRenderPos.z){
 
-            handleRefreshMoreY(newChunks);
+            handleRefreshMoreZ();
         }
-
-        chunks = newChunks;
     }
 
-    private void handleRefreshLessX(Chunk[][] newChunks){
+    private void handleRefreshLessX(){
 
-        downRenderPos.x -= Chunk.CHUNKS_2D_SIZE;
+        Chunk[][] newChunks = cloneChunks();
 
-        Vector2f chunkPos = new Vector2f(downRenderPos.x, downRenderPos.z);
+        downMaxRenderPos.x -= Chunk.CHUNKS_2D_SIZE;
+        topMaxRenderPos.x -= Chunk.CHUNKS_2D_SIZE;
+
+        downLocalRenderPos.x -= Chunk.CHUNKS_2D_SIZE;
+        topLocalRenderPos.x -= Chunk.CHUNKS_2D_SIZE;
 
         for(int zI = 0; zI < DEFAULT_CHUNKS_WIDTH; zI++){
 
@@ -139,23 +147,28 @@ public class Renderer {
             }
         }
 
+        Vector2f chunkPos = new Vector2f(downMaxRenderPos.x, downMaxRenderPos.z);
+
         for(int zI = 0; zI < DEFAULT_CHUNKS_WIDTH; zI++){
 
             Chunk chunk = new Chunk(chunkPos, combinedGenerator);
 
             chunk.init();
 
-            chunks[0][zI] = chunk;
+            newChunks[0][zI] = chunk;
 
             chunkPos.y += Chunk.CHUNKS_2D_SIZE;
         }
+
+        chunks = newChunks;
     }
 
-    private void handleRefreshMoreX(Chunk[][] newChunks){
+    private void handleRefreshMoreX(){
 
-        downRenderPos.x += Chunk.CHUNKS_2D_SIZE;
+        Chunk[][] newChunks = cloneChunks();
 
-        Vector2f chunkPos = new Vector2f(downRenderPos.x, downRenderPos.z);
+        downLocalRenderPos.x += Chunk.CHUNKS_2D_SIZE;
+        topLocalRenderPos.x += Chunk.CHUNKS_2D_SIZE;
 
         for(int zI = 0; zI < DEFAULT_CHUNKS_WIDTH; zI++){
 
@@ -164,7 +177,7 @@ public class Renderer {
             oldChunk.clear();
         }
 
-        for (int xI = DEFAULT_CHUNKS_WIDTH - 2; xI >= 0 ; xI--){
+        for (int xI = 0; xI < DEFAULT_CHUNKS_WIDTH - 1; xI++){
 
             for(int zI = 0; zI < DEFAULT_CHUNKS_WIDTH; zI++){
 
@@ -172,23 +185,34 @@ public class Renderer {
             }
         }
 
+        Vector2f chunkPos = new Vector2f(topMaxRenderPos.x, downMaxRenderPos.z);
+
         for(int zI = 0; zI < DEFAULT_CHUNKS_WIDTH; zI++){
 
             Chunk chunk = new Chunk(chunkPos, combinedGenerator);
 
             chunk.init();
 
-            chunks[DEFAULT_CHUNKS_WIDTH - 1][zI] = chunk;
+            newChunks[DEFAULT_CHUNKS_WIDTH - 1][zI] = chunk;
 
             chunkPos.y += Chunk.CHUNKS_2D_SIZE;
         }
+
+        downMaxRenderPos.x += Chunk.CHUNKS_2D_SIZE;
+        topMaxRenderPos.x += Chunk.CHUNKS_2D_SIZE;
+
+        chunks = newChunks;
     }
 
-    private void handleRefreshLessY(Chunk[][] newChunks){
+    private void handleRefreshLessZ(){
 
-        downRenderPos.z -= Chunk.CHUNKS_2D_SIZE;
+        Chunk[][] newChunks = cloneChunks();
 
-        Vector2f chunkPos = new Vector2f(downRenderPos.x, downRenderPos.z);
+        downMaxRenderPos.z -= Chunk.CHUNKS_2D_SIZE;
+        topMaxRenderPos.z -= Chunk.CHUNKS_2D_SIZE;
+
+        downLocalRenderPos.z -= Chunk.CHUNKS_2D_SIZE;
+        topLocalRenderPos.z -= Chunk.CHUNKS_2D_SIZE;
 
         for(int xI = 0; xI < DEFAULT_CHUNKS_WIDTH; xI++){
 
@@ -205,23 +229,28 @@ public class Renderer {
             }
         }
 
+        Vector2f chunkPos = new Vector2f(downMaxRenderPos.x, downMaxRenderPos.z);
+
         for(int xI = 0; xI < DEFAULT_CHUNKS_WIDTH; xI++){
 
             Chunk chunk = new Chunk(chunkPos, combinedGenerator);
 
             chunk.init();
 
-            chunks[xI][0] = chunk;
+            newChunks[xI][0] = chunk;
 
             chunkPos.x += Chunk.CHUNKS_2D_SIZE;
         }
+
+        chunks = newChunks;
     }
 
-    private void handleRefreshMoreY(Chunk[][] newChunks){
+    private void handleRefreshMoreZ(){
 
-        downRenderPos.z += Chunk.CHUNKS_2D_SIZE;
+        Chunk[][] newChunks = cloneChunks();
 
-        Vector2f chunkPos = new Vector2f(downRenderPos.x, downRenderPos.z);
+        downLocalRenderPos.z += Chunk.CHUNKS_2D_SIZE;
+        topLocalRenderPos.z += Chunk.CHUNKS_2D_SIZE;
 
         for(int xI = 0; xI < DEFAULT_CHUNKS_WIDTH; xI++){
 
@@ -238,16 +267,44 @@ public class Renderer {
             }
         }
 
+        Vector2f chunkPos = new Vector2f(downMaxRenderPos.x, topMaxRenderPos.z);
+
         for(int xI = 0; xI < DEFAULT_CHUNKS_WIDTH; xI++){
 
             Chunk chunk = new Chunk(chunkPos, combinedGenerator);
 
             chunk.init();
 
-            chunks[xI][DEFAULT_CHUNKS_WIDTH - 1] = chunk;
+            newChunks[xI][DEFAULT_CHUNKS_WIDTH - 1] = chunk;
 
             chunkPos.x += Chunk.CHUNKS_2D_SIZE;
         }
+
+        downMaxRenderPos.z += Chunk.CHUNKS_2D_SIZE;
+        topMaxRenderPos.z += Chunk.CHUNKS_2D_SIZE;
+
+        chunks = newChunks;
+    }
+
+    private Chunk[][] cloneChunks(){
+
+        Chunk[][] newChunks = new Chunk[chunks.length][chunks[0].length];
+
+        for(int i = 0; i < chunks.length; i++){
+
+            Chunk[] chunksRow = chunks[i];
+
+            Chunk[] newChunksRow = new Chunk[chunksRow.length];
+
+            for(int j = 0; j < chunksRow.length; j++){
+
+                newChunksRow[j] = chunksRow[j];
+            }
+
+            newChunks[i] = newChunksRow;
+        }
+
+        return newChunks;
     }
 
     public void render(){
