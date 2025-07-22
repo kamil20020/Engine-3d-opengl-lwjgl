@@ -47,4 +47,25 @@ public class Mesh {
             glEnd();
         }
     }
+
+    public Vector3f[] getVertices(){
+
+        return vertices;
+    }
+
+    public Integer[] getQuads(){
+
+        return quads;
+    }
+
+    public Vector2f[] getTextureCords(){
+
+        return textureCords;
+    }
+
+    public Integer[] getTextureCordsForVertices(){
+
+        return textureCordsForVertices;
+    }
+
 }

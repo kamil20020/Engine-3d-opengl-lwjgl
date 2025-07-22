@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.generator.CombinedGenerator;
 import org.example.mesh.Cube;
+import org.example.mesh.Mesh;
+import org.example.mesh.Plant;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -26,6 +28,7 @@ public class Chunk {
     private int vertexBufferId;
     private int visibleBlocks = 0;
 
+    public static final int BLOCK_SIZE = 16;
     public static final int CHUNKS_2D_SIZE = 16 * 16;
     public static final int CHUNKS_HEIGHT = 128;
     public static final int CHUNKS_SIZE = CHUNKS_2D_SIZE * CHUNKS_HEIGHT;
@@ -45,11 +48,6 @@ public class Chunk {
 
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(CHUNKS_SIZE * 6 * 4 * 5);
 
-        Vector3f[] vertices = Cube.getVertices(16);
-        Integer[] quads = Cube.getQuads();
-        Vector2f[] textureCords = Cube.getTextureCords();
-        Integer[] texturesForVertices = Cube.getTextureCordsForVertices();
-
         float x = downLeftPos.x;
 
         for(int xI=0; xI < 16; xI++){
@@ -68,7 +66,7 @@ public class Chunk {
                         continue;
                     }
 
-                    appendBlockToVerticesBuffer(blockType, x, y, z, vertices, quads, textureCords, texturesForVertices, verticesBuffer);
+                    appendBlockToVerticesBuffer(blockType, x, y, z, verticesBuffer);
 
                     visibleBlocks++;
 
@@ -110,13 +108,22 @@ public class Chunk {
         glDeleteVertexArrays(vertexArraysId);
     }
 
-    private void appendBlockToVerticesBuffer(byte blockType, float x, float y, float z, Vector3f[] vertices, Integer[] quads, Vector2f[] textureCords, Integer[] texturesForVertices, FloatBuffer verticesBuffer){
+    private void appendBlockToVerticesBuffer(byte blockType, float x, float y, float z, FloatBuffer verticesBuffer){
 
         String[] cubeTextures = CubeTextures.getCubeTextures(blockType);
 
         int quadIndex = 0;
 
-        for(int i = 0; i < 6; i++){
+        Mesh mesh = CubeTextures.getMesh(blockType);
+
+        Vector3f[] vertices = mesh.getVertices();
+        Integer[] quads = mesh.getQuads();
+        Vector2f[] textureCords = mesh.getTextureCords();
+        Integer[] texturesForVertices = mesh.getTextureCordsForVertices();
+
+        int numberOfQuads = quads.length / 4;
+
+        for(int i = 0; i < numberOfQuads; i++){
 
             String cubeTexture = cubeTextures[i];
 

@@ -1,51 +1,53 @@
 package org.example.mesh;
 
-import org.example.Chunk;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-public class Cube extends Mesh{
+public class Plant extends Mesh{
 
     private static final int DEFAULT_A = 16;
 
-    private static Cube INSTANCE = getInstance();
+    private static Plant INSTANCE = getInstance();
 
-    public static Cube getInstance(){
+    public static Plant getInstance(){
 
         if(INSTANCE == null){
 
-            INSTANCE = new Cube();
+            INSTANCE = new Plant();
         }
 
         return INSTANCE;
     }
 
-    private Cube(){
+    private Plant(){
 
         super(initVertices(DEFAULT_A), initQuads(), initTextureCords(), initTextureCordsForVertices());
     }
 
     private static Vector3f[] initVertices(int a){
 
-        int x = 0;
-        int y = 0;
-        int z = 0;
+        float x = 0;
+        float y = 0;
+        float z = 0;
 
-        int xFar = x + a;
-        int yFar = y + a;
-        int zFar = z + a;
+        float xFar = x + a;
+        float yFar = y + a;
+        float zFar = z + a;
+
+        float xFar2 = xFar / 2;
+        float zFar2 = zFar / 2;
 
         Vector3f[] vertices = new Vector3f[8];
 
-        vertices[0] = new Vector3f(x, y, zFar);
-        vertices[1] = new Vector3f(x, y, z);
-        vertices[2] = new Vector3f(xFar, y, zFar);
-        vertices[3] = new Vector3f(xFar, y, z);
+        vertices[0] = new Vector3f(xFar2, y, zFar);
+        vertices[1] = new Vector3f(xFar2, yFar, zFar);
+        vertices[2] = new Vector3f(xFar2, y, z);
+        vertices[3] = new Vector3f(xFar2, yFar, z);
 
-        vertices[4] = new Vector3f(x, yFar, zFar);
-        vertices[5] = new Vector3f(x, yFar, z);
-        vertices[6] = new Vector3f(xFar, yFar, zFar);
-        vertices[7] = new Vector3f(xFar, yFar, z);
+        vertices[4] = new Vector3f(x, y, zFar2);
+        vertices[5] = new Vector3f(x, yFar, zFar2);
+        vertices[6] = new Vector3f(xFar, y, zFar2);
+        vertices[7] = new Vector3f(xFar, yFar, zFar2);
 
         return vertices;
     }
@@ -53,12 +55,8 @@ public class Cube extends Mesh{
     private static Integer[] initQuads(){
 
         Integer[] getQuads = new Integer[]{
-            1, 0, 2, 3, // bottom
-            5, 7, 6, 4, // top
-            1, 3, 7, 5, // front
-            2, 0, 4, 6, // back
-            0, 1, 5, 4, // right
-            3, 2, 6, 7  // left
+            0, 1, 2, 3,
+            4, 5, 6, 7,
         };
 
         return getQuads;
@@ -81,10 +79,6 @@ public class Cube extends Mesh{
         Integer[] textureCordsForVertices = new Integer[]{
             0, 1, 2, 3,
             0, 1, 2, 3,
-            0, 1, 2, 3,
-            0, 1, 2, 3,
-            0, 1, 2, 3,
-            0, 1, 2, 3
         };
 
         return textureCordsForVertices;

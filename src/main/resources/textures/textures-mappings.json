@@ -4,14 +4,17 @@
   },
   {
     "id": "dirt",
+    "type": "CUBE",
 	"defaultTexture": "dirt"
   },
   {
 	"id": "stone",
+    "type": "CUBE",
 	"defaultTexture": "stone"
   },
   {
     "id": "grass",
+    "type": "CUBE",
     "textures": [
 		"dirt",
 		"grass_block_top",
@@ -24,18 +27,22 @@
   },
   {
     "id": "sand",
+    "type": "CUBE",
 	"defaultTexture": "sand"
   },
   {
     "id": "gravel",
-	"defaultTexture": "gravel"
+    "type": "PLANT",
+	"defaultTexture": "red_tulip"
   },
   {
     "id": "granite",
+    "type": "CUBE",
 	"defaultTexture": "granite"
   },
   {
 	"id": "bedrock",
+    "type": "CUBE",
 	"defaultTexture": "bedrock"
   }
 ]

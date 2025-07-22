@@ -1,6 +1,7 @@
 package texture;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.example.mesh.MeshType;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ import java.util.List;
 public record CubeTexturesInfo(
 
     String id,
+    MeshType type,
     List<String> textures,
     String defaultTexture
 ){}

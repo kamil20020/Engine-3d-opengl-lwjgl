@@ -2,12 +2,15 @@ package texture;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.example.JsonFileLoader;
+import org.example.mesh.Mesh;
+import org.example.mesh.MeshType;
 
 import java.util.*;
 
 public class CubeTextures{
 
     private static final Map<String, Byte> cubeTexturesNames = new HashMap<>();
+    private static final List<MeshType> cubeTexturesTypes = new ArrayList<>();
     private static final List<String[]> cubeTextures = new ArrayList<>();
 
     private static final String TEXTURES_MAPPINGS_FILE_PATH = "textures/textures-mappings.json";
@@ -30,6 +33,8 @@ public class CubeTextures{
             cubeTextures.add(cubeTexturesIds);
 
             cubeTexturesNames.put(cubeTexturesInfo.id(), cubeTextureIndex);
+
+            cubeTexturesTypes.add(cubeTexturesInfo.type());
 
             cubeTextureIndex++;
         }
@@ -97,6 +102,13 @@ public class CubeTextures{
         byte cubeTextureIndex = cubeTexturesNames.get(cubeTextureName);
 
         return cubeTextures.get(cubeTextureIndex);
+    }
+
+    public static Mesh getMesh(byte cubeTextureIndex){
+
+        MeshType meshType = cubeTexturesTypes.get(cubeTextureIndex);
+
+        return MeshType.getMesh(meshType);
     }
 
 }
